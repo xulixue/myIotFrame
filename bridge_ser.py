@@ -1,10 +1,8 @@
 #! /usr/bin/env python
 #-*- coding:utf-8 -*-
-# version : Python 2.7.13
 
 import socket
 import threading
-
 
 class ThreadedServer(object):
     def __init__(self, host, port):
@@ -15,7 +13,6 @@ class ThreadedServer(object):
         self.sock.bind((self.host, self.port))
 
     def listen(self):
-        print "listen on port : %d" % self.port
         self.sock.listen(5)
         while True:
             client, address = self.sock.accept()
@@ -27,10 +24,10 @@ class ThreadedServer(object):
         while True:
             try:
                 data = client.recv(size)
-                if data:                    
+                if data:
                     response = data
                     client.send(response)
-                    print "sendLen: ",len(data)                    
+                    print "secndLen: ",len(data)
                 else:
                     raise error('Client disconnected')
             except:
@@ -38,5 +35,11 @@ class ThreadedServer(object):
                 return False
 
 if __name__ == "__main__":
-    port_num = 14578
+    while True:
+        port_num = 14578
+        try:
+            port_num = int(port_num)
+            break
+        except ValueError:
+            pass
     ThreadedServer('',port_num).listen()

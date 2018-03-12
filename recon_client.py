@@ -13,13 +13,14 @@ def doConnect(host,port):
     return sock
 
 def main():
-    host,port = "xxx.xxx.xxx.xxx",14578
+#    host,port = "IP",14578
+    host,port = "127.0.0.1",14578
     print host,port
     sockLocal = doConnect(host,port)
 
     while True :
         try :
-            msg = str(time.time())
+            msg = "$~A01" + str(time.time())     # head cat data;
             sockLocal.send(msg)
             print "send msg ok : ",msg
             print "recv data :",sockLocal.recv(1024)

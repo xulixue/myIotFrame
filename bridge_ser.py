@@ -3,10 +3,60 @@
 
 import socket
 import threading
+import time;
+
+'''
+注意：这里数据的帧头设置为5位字符，需要改进。
+
+判断是移动端设备访问的时候，
+    第一步：是要筛选一下数据，将那些超时的id数据包删除，下线。   
+    第二步：将所有的转发数据包下载了。                       //这里执行之后是否要删除所有的数据包呢？ 这样确定可以看设备是否在线？ 还是不得了，还有其他设备访问呢，每次操作之后再刷新读取一次目标状态就可以了。
+判断是Iot设备数据的时候：
+    第一步判断是否有这个ID，有更新，没有的话添加。
+    
+要做的，每天的0点执行一次数据的筛选，超时的id要删除，id下线，目的是如果移动端总是不访问，而设备总是添加就会太大了。
+'''
+class DistriData:
+    timestamp=0.
+    data=""
+    head=""
+    def __init__(self,x,y,z):
+        self.timestamp=x
+        self.data=y
+        self.head = z
+devices =[]
+m=DistriData(1.0,"x0","head1")
+devices.append(m)
+m=DistriData(1.0,"x1","head2")
+devices.append(m)
+#devices.remove()
+
+print devices[0].data
+print len(devices)
 
 str_redit = ' ';
-str_A = ' ';
+str_A = ''
 str_B = ' ';
+
+def ManageDivice(strRev):
+    isNewData = True;                       #先假设是新的数据
+    if len(strRev) >= 5:
+        head = strRev[0:5]
+        # print head
+        for i in range(len(devices)):
+            if devices[i].head == head:         #已经有了更新时间戳，并且更新数据赋值。
+                devices[i].timestamp = time.time();
+                devices[i].data = strRev[5:];
+                isNewData = False;          #不是新的数据
+                break;
+
+        if isNewData:                       #如果是新的数据则添加数据。
+            m = DistriData(time.time(), strRev[5:], head)
+            devices.append(m)
+
+ManageDivice("head2xxxx")
+for i in range(len(devices)):
+    print devices[i].head, devices[i].data, devices[i].timestamp;
 
 class ThreadedServer(object):
     def __init__(self, host, port):
@@ -31,13 +81,13 @@ class ThreadedServer(object):
                 data = client.recv(size)
                 print "secndLen: ", len(data)
                 if len(data) > 5:
-                    isA = False;
+                    isIot = False;
                     for i in range(5):
                         if(data[i] != chr(65+i)):
                             print data[i],' is not equal', chr(65+i), ' , so this is from A'
-                            isA = True;
+                            isIot = True;
 
-                    if isA:
+                    if isIot:
                         str_A = data;
                         print str_A
                         str_redit = str_B;

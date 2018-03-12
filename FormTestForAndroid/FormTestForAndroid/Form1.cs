@@ -22,7 +22,7 @@ namespace FormTestForAndroid
         int clickCgFlag = 0;
         private void loginButton_Click(/*object sender, EventArgs e*/)
         {
-            string ipStr = "66.98.119.26";
+            string ipStr = this.textBox1.Text.Trim();
             IPAddress ip = IPAddress.Parse(ipStr);
             clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             clientSocket.SendTimeout = 1000;         //连接和发送时间超过500ms则失败了。
@@ -90,6 +90,21 @@ namespace FormTestForAndroid
         private void Form1_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (clientSocket != null && clientSocket.Connected)
+            {
+                clientSocket.Close();
+                clientSocket.Dispose();
+            }
+            if (checkBox1.Checked)
+            {
+                this.textBox1.Text = "127.0.0.1";
+            }
+            else
+                this.textBox1.Text = "66.98.119.26";
         }
     }
 }

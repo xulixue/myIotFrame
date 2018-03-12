@@ -20,7 +20,7 @@ def main():
 
     while True :
         try :
-            msg = "$~A01" + str(time.time())     # head cat data;
+            msg = "$~A02" + str(time.time())     # head cat data;
             sockLocal.send(msg)
             print "send msg ok : ",msg
             print "recv data :",sockLocal.recv(1024)

@@ -9,6 +9,7 @@ import time;
 注意：这里数据的帧头设置为5位字符，需要改进。
 
 判断是移动端设备访问的时候，
+    将数据记录到中间变量，所有的Iot设备可以收到，相当于广播。
     第一步：是要筛选一下数据，将那些超时的id数据包删除，下线。   
     第二步：将所有的转发数据包下载了。                       //这里执行之后是否要删除所有的数据包呢？ 这样确定可以看设备是否在线？ 还是不得了，还有其他设备访问呢，每次操作之后再刷新读取一次目标状态就可以了。
 判断是Iot设备数据的时候：
@@ -36,7 +37,7 @@ print len(devices)
 
 str_redit = ' ';
 str_A = ''
-str_B = ' ';
+strRemoteDeviBroadcast = ' ';
 
 def ManageDivice(strRev):
     isNewData = True;                       #先假设是新的数据
@@ -54,9 +55,15 @@ def ManageDivice(strRev):
             m = DistriData(time.time(), strRev[5:], head)
             devices.append(m)
 
-ManageDivice("head2xxxx")
-for i in range(len(devices)):
-    print devices[i].head, devices[i].data, devices[i].timestamp;
+timeOutCleanThreash = 5.0;              # Units is seconds
+def CleanOutDatas():
+    for i in range(len(devices)):
+        if time.time() - devices[i].timestamp > timeOutCleanThreash:
+            del devices[i];
+
+# ManageDivice("head2xxxx")
+# for i in range(len(devices)):
+#     print devices[i].head, devices[i].data, devices[i].timestamp;
 
 class ThreadedServer(object):
     def __init__(self, host, port):
@@ -74,7 +81,7 @@ class ThreadedServer(object):
             threading.Thread(target = self.listenToClient,args = (client,address)).start()
 
     def listenToClient(self, client, address):
-        global str_redit, str_A, str_B;
+        global str_redit, str_A, strRemoteDeviBroadcast;
         size = 1024
         while True:
             try:
@@ -84,19 +91,26 @@ class ThreadedServer(object):
                     isIot = False;
                     for i in range(5):
                         if(data[i] != chr(65+i)):
-                            print data[i],' is not equal', chr(65+i), ' , so this is from A'
+                            # print data[i],' is not equal', chr(65+i), ' , so this is from A'
                             isIot = True;
 
                     if isIot:
-                        str_A = data;
-                        print str_A
-                        str_redit = str_B;
+                        print 'is Iot devices.'
+                        ManageDivice(data)          #更新或者添加
+                        # str_A = data;
+                        # print str_A
+                        str_redit = strRemoteDeviBroadcast;         #Iot设备都可以接收到移动端设备发送的广播指令。
                     else:
-                        str_B = data;
-                        print str_B
-                        str_redit = str_A;
+                        print 'is like a phone.'
+                        CleanOutDatas();
+                        strRemoteDeviBroadcast = data;
+                        print strRemoteDeviBroadcast
+                        for i in range(len(devices)):               #移动设备一次读取所有Iot设备数据。
+                            str_redit += devices[i].head + devices[i].data + "\n";
+                            print devices[i].head, devices[i].data, devices[i].timestamp;
                     if len(str_redit) > 0:
                         client.send(str_redit)
+                        str_redit = ''          #这里清除下。
                 else:
                     raise error('Client disconnected or Reved short than 5 chars')
             except:

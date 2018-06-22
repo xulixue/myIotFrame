@@ -30,7 +30,11 @@ m=DistriData(1.0,"x0","head1")
 devices.append(m)
 m=DistriData(1.0,"x1","head2")
 devices.append(m)
+m=DistriData(1.0,"x1","head3")
+devices.append(m)
 #devices.remove()
+
+del devices[1];
 
 print devices[0].data
 print len(devices)
@@ -55,9 +59,9 @@ def ManageDivice(strRev):
             m = DistriData(time.time(), strRev[5:], head)
             devices.append(m)
 
-timeOutCleanThreash = 5.0;              # Units is seconds
+timeOutCleanThreash = 60.0;              # Units is seconds
 def CleanOutDatas():
-    for i in range(len(devices)):
+    for i in range(len(devices) - 1,-1,-1):                 #这里要倒叙删除，解决删除数组元素exception
         if time.time() - devices[i].timestamp > timeOutCleanThreash:
             del devices[i];
 
@@ -95,7 +99,7 @@ class ThreadedServer(object):
                             isIot = True;
 
                     if isIot:
-                        print 'is Iot devices.'
+                        print 'This is from Iot devices.ID:', data[0:5];
                         ManageDivice(data)          #更新或者添加
                         # str_A = data;
                         # print str_A

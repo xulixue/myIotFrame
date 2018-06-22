@@ -112,11 +112,15 @@ class ThreadedServer(object):
                         for i in range(len(devices)):               #移动设备一次读取所有Iot设备数据。
                             str_redit += devices[i].head + devices[i].data + "\n";
                             print devices[i].head, devices[i].data, devices[i].timestamp;
-                    if len(str_redit) > 0:
+                    if len(str_redit) > 1:                                  #光有一个"\n"或者space也不算有数据
                         client.send(str_redit)
                         str_redit = ''          #这里清除下。
+                    else:
+                        client.send('now there is no data,-_-!')
                 else:
-                    raise error('Client disconnected or Reved short than 5 chars')
+                    print ('ALL Client disconnected or Reved short than 5 chars')
+                    client.send('Client disconnected or Reved short than 5 chars')
+                    #raise error('Client disconnected or Reved short than 5 chars')
             except:
                 client.close()
                 return False

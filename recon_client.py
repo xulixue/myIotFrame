@@ -13,8 +13,8 @@ def doConnect(host,port):
     return sock
 
 def main():
-#    host,port = "IP",14578
-    host,port = "127.0.0.1",14578
+    host,port = "IP",14578
+#    host,port = "127.0.0.1",14578
     print host,port
     sockLocal = doConnect(host,port)
 

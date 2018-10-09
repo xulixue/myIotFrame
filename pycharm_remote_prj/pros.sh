@@ -16,12 +16,12 @@ CheckProcess()
 }   
   
 while [ 1 ] ; do  
-    CheckProcess "./a.out"  
+    CheckProcess "python2 recon_client.py"  
     CheckQQ_RET=$?  
     if [ $CheckQQ_RET -eq 1 ];  
     then  
-     killall -9 a.out  
-     exec ./a.out &  
+     killall -9 python2 recon_client.py   
+     exec python2 recon_client.py  &  
     fi  
     sleep 1  
 done 

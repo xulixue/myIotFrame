@@ -14,13 +14,13 @@ def doConnect(host,port):
 
 def main():
     host,port = "IP",14578
-#    host,port = "127.0.0.1",14578
+	#    host,port = "127.0.0.1",14578
     print host,port
     sockLocal = doConnect(host,port)
 
     while True :
         try :
-            msg = "$~A02" + str(time.time())     # head cat data;
+            msg = str(time.time())
             sockLocal.send(msg)
             print "send msg ok : ",msg
             print "recv data :",sockLocal.recv(1024)
@@ -35,3 +35,4 @@ def main():
 
 if __name__ == "__main__" :
     main()
+

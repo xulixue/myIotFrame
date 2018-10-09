@@ -1,1 +1,8 @@
 .idea/
+tcp_recon_bk
+
+FormTestForAndroid/.vs
+FormTestForAndroid/*.v12.suo
+FormTestForAndroid/FormTestForAndroid/bin/
+FormTestForAndroid/FormTestForAndroid/obj/
+

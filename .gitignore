@@ -1,6 +1,8 @@
 .idea/
 tcp_recon_bk
 
+pycharm_remote_prj/.idea
+
 FormTestForAndroid/.vs
 FormTestForAndroid/*.v12.suo
 FormTestForAndroid/FormTestForAndroid/bin/

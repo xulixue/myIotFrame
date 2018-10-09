@@ -4,6 +4,8 @@
 import os,sys,time
 import socket
 
+import ConfigParser
+
 def doConnect(host,port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try :
@@ -13,13 +15,16 @@ def doConnect(host,port):
     return sock
 
 def main():
-    host,port = "IP",14578
+    cf = ConfigParser.ConfigParser()
+    cf.read("./db_config.ini")
+    host = cf.get("host_cfg", "host")
+    port = cf.get("host_cfg", "port")
     print host,port
     sockLocal = doConnect(host,port)
 
     while True :
         try :
-            msg = str(time.time())
+            msg = '''"$~A02"''' + str(time.time())     # head cat data;
             sockLocal.send(msg)
             print "send msg ok : ",msg
             print "recv data :",sockLocal.recv(1024)

@@ -2,6 +2,7 @@
 tcp_recon_bk
 
 pycharm_remote_prj/.idea
+pycharm_remote_prj/db_config.ini
 
 FormTestForAndroid/.vs
 FormTestForAndroid/*.v12.suo

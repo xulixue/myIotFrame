@@ -5,6 +5,10 @@ import os,sys,time
 import socket
 
 import ConfigParser
+cf = ConfigParser.ConfigParser()
+cf.read("./db_config.ini")
+host = cf.get("host_cfg", "host")
+port_str = cf.get("host_cfg", "port")
 
 def doConnect(host,port):
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -14,17 +18,17 @@ def doConnect(host,port):
         pass
     return sock
 
+
 def main():
-    cf = ConfigParser.ConfigParser()
-    cf.read("./db_config.ini")
-    host = cf.get("host_cfg", "host")
-    port = cf.get("host_cfg", "port")
+    # host = "IP"
+    # port =
+    port = int(port_str);
     print host,port
     sockLocal = doConnect(host,port)
 
     while True :
         try :
-            msg = '''"$~A02"''' + str(time.time())     # head cat data;
+            msg = "$~A01" + str(time.time())     # head cat data;
             sockLocal.send(msg)
             print "send msg ok : ",msg
             print "recv data :",sockLocal.recv(1024)

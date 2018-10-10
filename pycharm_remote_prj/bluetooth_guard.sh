@@ -33,6 +33,7 @@ while [ 1 ] ; do
     sudo systemctl start bluetooth
     sleep 1
     sudo python2 blueScan.py
+    echo "执行了一次" >> bluetooth_sta.log
     fi
     sleep 1
 done 

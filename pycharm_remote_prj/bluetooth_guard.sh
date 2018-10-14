@@ -23,7 +23,7 @@ while [ 1 ] ; do
     then
     echo "没有找到上面的进程，将执行下面的动作..."
     echo "杀死所有残留"
-    sudo sh killProByName.sh "python2 blueScan.py"
+    sudo sh killProByName.sh "blueScan.py"
     #killall -9 blueScan.py    #注意，killall -9 python2 blueScan.py的话会杀掉所有带有python2的进程，
                                #相当于 killall -9 python2 和 killall -9 blueScan.py
     echo "关闭系统蓝牙！"

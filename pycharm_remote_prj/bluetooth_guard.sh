@@ -18,17 +18,20 @@ CheckProcess()
 while [ 1 ] ; do  
     CheckProcess "sudo python2 blueScan.py"
     CheckQQ_RET=$?  
-    if [ $CheckQQ_RET -eq 1 ];  
+    if [ $CheckQQ_RET -eq 1 ]
+    echo "不知道如果执行这里了说明什么。"
     then
     echo "没有找到上面的进程，将执行下面的动作..."
     echo "杀死所有残留"
-    killall -9 blueScan.py    #注意，killall -9 python2 blueScan.py的话会杀掉所有带有python2的进程，
+    sudo sh killProByName.sh "python2 blueScan.py"
+    #killall -9 blueScan.py    #注意，killall -9 python2 blueScan.py的话会杀掉所有带有python2的进程，
                                #相当于 killall -9 python2 和 killall -9 blueScan.py
     echo "关闭系统蓝牙！"
     sudo sh turnOff_bluetooth.sh &
-    sleep 3
+    sleep 2
     echo "打开系统蓝牙！"
     sudo sh turnOn_bluetooth.sh &
+    sleep 2
     sudo service bluetooth start
     sudo systemctl start bluetooth
     sleep 1
